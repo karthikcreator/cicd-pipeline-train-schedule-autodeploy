@@ -8,8 +8,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build automation'
-                
-                sh './gradlew build '
+                def buildInfo = rtGradle.run rootDir: "gradle-examples/4/gradle-example-ci-server/", buildFile: 'build.gradle', tasks: 'clean artifactoryPublish'
+        stage 'Publish build info'
+            server.publishBuildInfo buildInfo
+
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
